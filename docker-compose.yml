@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8081:8080
+
+  MySQL:
+    image: mysql:8.0.18
+    hostname: MySQL
+    restart: always
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: Password12!
+      MYSQL_USER: app
+      MYSQL_PASSWORD: pass
+      MYSQL_DATABASE: app
+
+  Postgres:
+    image: postgres:12.0-alpine
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      MYSQL_ROOT_PASSWORD: Password12!
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: app
+
+
+  nodejs:
+    image: node:12.16.0
+    hostname: nodejs
+    ports:
+      - 9999:9999
+    volumes:
+      - ./gate-simulator/app.js:/gate-simulator/app.js
+      - ./gate-simulator/data.json:/gate-simulator/data.json
+      - ./gate-simulator/package.json:/gate-simulator/package.json
+    working_dir: /gate-simulator
+    command:
+      npm start
+
+  Java:
+    restart: always
+    image: bitnami/java:13.0.1
+    ports:
+      - 8080:8080
+    command: "java -jar /app/aqa-shop.jar"
+    volumes:
+      - ./artifacts:/app
+      - ./application.properties:/application.properties
+
+volumes:
+  pgdata:
