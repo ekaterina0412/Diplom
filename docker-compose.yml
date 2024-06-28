@@ -9,11 +9,11 @@ services:
       - 8081:8080
 
   MySQL:
-    image: mysql:8.0.18
+    image: mysql:latest
     hostname: MySQL
     restart: always
     ports:
-      - 3306:3306
+      - '3306:3306'
     environment:
       MYSQL_ROOT_PASSWORD: Password12!
       MYSQL_USER: app
