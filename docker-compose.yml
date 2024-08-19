@@ -1,4 +1,4 @@
-version: '3'
+version: '3.7'
 
 services:
 
@@ -10,9 +10,9 @@ services:
       - '3306:3306'
     environment:
       MYSQL_ROOT_PASSWORD: Password12!
+      MYSQL_DATABASE: app
       MYSQL_USER: app
       MYSQL_PASSWORD: pass
-      MYSQL_DATABASE: app
 
   Postgres:
     image: postgres:12.0-alpine
@@ -20,10 +20,23 @@ services:
     ports:
       - 5432:5432
     environment:
-      MYSQL_ROOT_PASSWORD: Password12!
+      POSTGRES_DB: app
       POSTGRES_USER: app
       POSTGRES_PASSWORD: pass
-      POSTGRES_DB: app
+      MYSQL_ROOT_PASSWORD: Password12!
+
+  nodejs:
+    image: node:12.16.0
+    hostname: nodejs
+    ports:
+      - 9999:9999
+    volumes:
+      - ./gate-simulator/app.js:/gate-simulator/app.js
+      - ./gate-simulator/data.json:/gate-simulator/data.json
+      - ./gate-simulator/package.json:/gate-simulator/package.json
+    working_dir: /gate-simulator
+    command:
+      npm start
 
 volumes:
   pgdata:
