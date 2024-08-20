@@ -3,7 +3,7 @@ version: '3.7'
 services:
 
   MySQL:
-    image: mysql:latest
+    image: mysql:8.0.31
     hostname: MySQL
     restart: always
     ports:
@@ -15,28 +15,17 @@ services:
       MYSQL_PASSWORD: pass
 
   Postgres:
-    image: postgres:12.0-alpine
+    image: postgres:14-alpine
     restart: always
     ports:
-      - 5432:5432
+      - '5432:5432'
     environment:
       POSTGRES_DB: app
       POSTGRES_USER: app
       POSTGRES_PASSWORD: pass
-      MYSQL_ROOT_PASSWORD: Password12!
 
-  nodejs:
-    image: node:12.16.0
-    hostname: nodejs
+  node-app:
+    build: ./gate-simulator
+    image: node-app:1.0
     ports:
-      - 9999:9999
-    volumes:
-      - ./gate-simulator/app.js:/gate-simulator/app.js
-      - ./gate-simulator/data.json:/gate-simulator/data.json
-      - ./gate-simulator/package.json:/gate-simulator/package.json
-    working_dir: /gate-simulator
-    command:
-      npm start
-
-volumes:
-  pgdata:
+      - '9999:9999'
