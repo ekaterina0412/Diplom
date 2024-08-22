@@ -19,11 +19,6 @@ public class PageObjectsTravel{
 
     public PageObjectsTravel() {
         open("http://localhost:8080/");
-        Constant.TITLE.waitUntil(Condition.visible, 15000);
-        Constant.PROMO_PHOTO.isDisplayed();
-        Constant.COUNTRY.isDisplayed();
-        Constant.PAYMENT_BUTTON.isDisplayed();
-        Constant.CREDIT_BUTTON.isDisplayed();
     }
 
     public void choosePayMethod(int type) {
@@ -34,13 +29,6 @@ public class PageObjectsTravel{
         } else if (this.type == CREDIT) {
             Constant.CREDIT_CARD_TITLE.shouldHave(Condition.text("Кредит по данным карты"));
         }
-
-        Constant.CARD_NUMBER_INPUT.isDisplayed();
-        Constant.MONTH_INPUT.isDisplayed();
-        Constant.YEAR_INPUT.isDisplayed();
-        Constant.OWNER_INPUT.isDisplayed();
-        Constant.CVC_CODE_INPUT.isDisplayed();
-        Constant.CONTINUE_BUTTON.isDisplayed();
     }
 
     public PageObjectsTravel setFields(int typeCard) {

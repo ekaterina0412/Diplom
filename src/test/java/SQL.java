@@ -12,13 +12,14 @@ public class SQL {
         Properties properties = new Properties();
         properties.load(new FileReader(file));
 
-        String[] parts = properties.getProperty("spring.datasource.url").split(":");
-        parts[2] = "//localhost";
-        String url = String.join(":", parts);
+        //String[] parts = properties.getProperty("spring.datasource.url").split(":");
+        //parts[2] = "//localhost";
+        //String url = String.join(":", parts);
 
         String selectStatus = "SELECT status FROM payment_entity";
 
-        Connection conn = DriverManager.getConnection(url,
+        //Connection conn = DriverManager.getConnection(url,
+        Connection conn = DriverManager.getConnection(System.getProperty("db.url"),
                 properties.getProperty("spring.datasource.username"),
                 properties.getProperty("spring.datasource.password"));
         PreparedStatement cardStatusRequest = conn.prepareStatement(selectStatus);
@@ -33,13 +34,14 @@ public class SQL {
         Properties properties = new Properties();
         properties.load(new FileReader(file));
 
-        String[] parts = properties.getProperty("spring.datasource.url").split(":");
-        parts[2] = "//localhost";
-        String url = String.join(":", parts);
+        //String[] parts = properties.getProperty("spring.datasource.url").split(":");
+        //parts[2] = "//localhost";
+        //String url = String.join(":", parts);
 
         String selectStatus = "SELECT status FROM credit_request_entity";
 
-        Connection conn = DriverManager.getConnection(url,
+        //Connection conn = DriverManager.getConnection(url,
+        Connection conn = DriverManager.getConnection(System.getProperty("db.url"),
                 properties.getProperty("spring.datasource.username"),
                 properties.getProperty("spring.datasource.password"));
         PreparedStatement cardStatusRequest = conn.prepareStatement(selectStatus);
@@ -54,15 +56,15 @@ public class SQL {
         Properties properties = new Properties();
         properties.load(new FileReader(file));
 
-        String[] parts = properties.getProperty("spring.datasource.url").split(":");
-        parts[2] = "//localhost";
-        String url = String.join(":", parts);
+        //String[] parts = properties.getProperty("spring.datasource.url").split(":");
+        //parts[2] = "//localhost";
+        //String url = String.join(":", parts);
 
         String truncateCreditRequestEntity = "TRUNCATE TABLE credit_request_entity";
         String truncateOrderEntity = "TRUNCATE TABLE order_entity";
         String truncatePaymentEntity = "TRUNCATE TABLE payment_entity";
 
-        Connection conn = DriverManager.getConnection(url,
+        Connection conn = DriverManager.getConnection(System.getProperty("db.url"),
                 properties.getProperty("spring.datasource.username"),
                 properties.getProperty("spring.datasource.password"));
 
