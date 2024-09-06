@@ -10,8 +10,8 @@
 4. Открыть новую вкладку в терминале (не закрывая предыдущую)
 5. Запуск тестов c указанием пути к базе данных:
 
-   5.1. Для mysql ввести в терминале `./gradlew clean test "-Ddb.url=jdbc:mysql://localhost:3306/app"`
+   5.1. Для mysql ввести в терминале `.\gradlew clean test "-Ddb.url=jdbc:mysql://localhost:3306/app"`
    
-   5.2. Для postgresql ввести в терминале `./gradlew clean test "-Ddb.url=jdbc:postgresql://localhost:5432/app"`
+   5.2. Для postgresql ввести в терминале `.\gradlew clean test "-Ddb.url=jdbc:postgresql://localhost:5432/app"`
 6. Для произведения отчета Allure  ввести в терминале `gradlew allureReport`
 7. Для получения отчета Allure ввести в терминале `gradlew allureServe`

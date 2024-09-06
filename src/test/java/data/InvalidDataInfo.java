@@ -1,5 +1,6 @@
-package Data;
+package data;
 
+import java.util.Calendar;
 import java.util.Random;
 
 public class InvalidDataInfo {
@@ -20,18 +21,29 @@ public class InvalidDataInfo {
             this.invalidCvcCode = invalidCvcCode;
         }
 
-        public static String getInvalidMonth() {
-            String[] months = {"1", "9", "33", "14"};
+        public static String getInvalidMonth1() {
+            String[] months = {"1", "9"};
+            Random random = new Random();
+            int i = random.nextInt(months.length);
+            return months[i];
+        }
+
+        public static String getInvalidMonth2() {
+            String[] months = {"33", "14"};
             Random random = new Random();
             int i = random.nextInt(months.length);
             return months[i];
         }
 
         public static String getPastYear() {
-            String[] years = {"10", "11", "18"};
-            Random random = new Random();
-            int i = random.nextInt(years.length);
-            return years[i];
+            String res = "";
+
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR) - 1;
+            String year_as_str = Integer.toString(year);
+            res = year_as_str.substring(year_as_str.length() - 2);
+
+            return res;
         }
 
         public static String getInvalidCvcCode() {

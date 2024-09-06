@@ -1,7 +1,3 @@
-import Data.Info;
-import Data.InvalidDataInfo;
-import PageObjects.Constant;
-import PageObjects.PageObjectsTravel;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.logevents.SelenideLogger;
@@ -10,6 +6,7 @@ import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import pageobjects.PageObjectsTravel;
 
 import java.time.Duration;
 
@@ -24,8 +21,8 @@ public class GUITest {
 
     @BeforeEach
     @DisplayName("Clear base table")
-    void cleanTable() throws Exception {
-        //SQL.clearTables();
+    void cleanTable() {
+        SQL.clearTables();
     }
 
     @AfterAll
@@ -37,11 +34,11 @@ public class GUITest {
     @Description("We check the form through the \"Buy\" button. We serve different card numbers")
     @ParameterizedTest
     @CsvFileSource(resources = "./NotificationCheck.csv", numLinesToSkip = 1)
-    void paymentTest(int cardNumber, String baseStatus) throws Exception {
+    void paymentTest(int cardNumber, String baseStatus) {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .setFields(cardNumber);
-        Constant.CONTINUE_BUTTON.click();
+                .setFields(cardNumber)
+                .continueButtonClick();
         $(Selectors.withText("Успешно")).shouldBe(Condition.visible, Duration.ofSeconds(15));
         assertEquals(SQL.getPaymentStatus(), baseStatus);
     }
@@ -50,11 +47,11 @@ public class GUITest {
     @Description("We check the form through the \"buy in credit\" button. We serve different card numbers")
     @ParameterizedTest
     @CsvFileSource(resources = "./NotificationCheck.csv", numLinesToSkip = 1)
-    void creditTest(int cardNumber, String baseStatus) throws Exception {
+    void creditTest(int cardNumber, String baseStatus) {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .setFields(cardNumber);
-        Constant.CONTINUE_BUTTON.click();
+                .setFields(cardNumber)
+                .continueButtonClick();
         $(Selectors.withText("Успешно")).shouldBe(Condition.visible, Duration.ofSeconds(15));
         assertEquals(SQL.getCreditStatus(), baseStatus);
     }
@@ -62,21 +59,21 @@ public class GUITest {
     @DisplayName("By to payment with unknown card")
     @Description("Check the form through the \"Buy\" button. Use unknown card number")
     @Test
-    void paymentWithUnknownCardNumber() throws InterruptedException {
+    void paymentWithUnknownCardNumber() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .setFields(2);
-        Constant.CONTINUE_BUTTON.click();
+                .setFields(2)
+                .continueButtonClick();
     }
 
     @DisplayName("By to credit with unknown card")
     @Description("Check the form through the \"buy in credit\" button. Use unknown card number")
     @Test
-    void creditWithUnknownCardNumber() throws InterruptedException {
+    void creditWithUnknownCardNumber() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .setFields(2);
-        Constant.CONTINUE_BUTTON.click();
+                .setFields(2)
+                .continueButtonClick();
     }
 
     @DisplayName("Empty fields payment form")
@@ -84,8 +81,8 @@ public class GUITest {
     @Test
     void emptyFieldsPaymentCheck() {
         PageObjectsTravel travel = new PageObjectsTravel()
-                .paymentButtonClick();
-        Constant.CONTINUE_BUTTON.click();
+                .paymentButtonClick()
+                .continueButtonClick();
     }
 
     @DisplayName("Empty fields credit form")
@@ -93,21 +90,27 @@ public class GUITest {
     @Test
     void emptyFieldsCreditCheck() {
         PageObjectsTravel travel = new PageObjectsTravel()
-                .creditButtonClick();
-        Constant.CONTINUE_BUTTON.click();
+                .creditButtonClick()
+                .continueButtonClick();
     }
 
-    @DisplayName("Wrong format to valid date fields")
-    @Description("Set past year and unreal month")
+    @DisplayName("Wrong format 1 to valid date fields")
+    @Description("Set past year and unreal month 1")
     @Test
-    void invalidDateFieldsPaymentCheck() {
+    void invalidDateFieldsPaymentCheck1() {
         PageObjectsTravel travel = new PageObjectsTravel()
-                .paymentButtonClick();
-        Constant.CARD_NUMBER_INPUT.sendKeys(InvalidDataInfo.CardFields.getUnknownFormatCardNumber());
-        Constant.MONTH_INPUT.sendKeys(InvalidDataInfo.CardFields.getInvalidMonth());
-        Constant.YEAR_INPUT.sendKeys(InvalidDataInfo.CardFields.getPastYear());
-        Constant.OWNER_INPUT.sendKeys(Info.getRandomOwner());
-        Constant.CVC_CODE_INPUT.sendKeys(InvalidDataInfo.CardFields.getInvalidCvcCode());
-        Constant.CONTINUE_BUTTON.click();
+                .paymentButtonClick()
+                .setInvalidFields1()
+                .continueButtonClick();
+    }
+
+    @DisplayName("Wrong format 2 to valid date fields")
+    @Description("Set past year and unreal month 2")
+    @Test
+    void invalidDateFieldsPaymentCheck2() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .paymentButtonClick()
+                .setInvalidFields2()
+                .continueButtonClick();
     }
 }
