@@ -46,10 +46,25 @@ public class InvalidDataInfo {
             return res;
         }
 
+        public static String getVeryOldYear() {
+            String res = "";
+
+            Calendar calendar = Calendar.getInstance();
+            int year = calendar.get(Calendar.YEAR) - 10;
+            String year_as_str = Integer.toString(year);
+            res = year_as_str.substring(year_as_str.length() - 2);
+
+            return res;
+        }
+
         public static String getInvalidCvcCode() {
             Random random = new Random();
             int rnd = random.nextInt(90) + 10;
             return Integer.toString(rnd);
+        }
+
+        public static String getInvalidRusOwner() {
+            return "Тест Тест Тест";
         }
 
         public static String getUnknownFormatCardNumber() {

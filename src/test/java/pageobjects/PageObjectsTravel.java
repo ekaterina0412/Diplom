@@ -1,29 +1,17 @@
 package pageobjects;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import data.Info;
-import com.codeborne.selenide.Condition;
 import data.InvalidDataInfo;
+
+import java.time.Duration;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
-import static com.codeborne.selenide.Selenide.$;
 
 public class PageObjectsTravel{
 
-    public static final int PAYMENT = 0;
-    public static final int CREDIT = 1;
-
-    public static final int APPROVED_CARD = 0;
-    public static final int DECLINED_CARD = 1;
-    public static final int UNKNOWN_CARD = 2;
-
-    int type;
-    int typeCard;
-
-    private static final SelenideElement TITLE = $(byText("Путешествие дня"));
-    private static final SelenideElement PROMO_PHOTO = $(".Order_cardImage__Q69ii");
-    private static final SelenideElement COUNTRY = $("h3.heading");
     private static final SelenideElement PAYMENT_BUTTON = $$("button").find(Condition.exactText("Купить"));
     private static final SelenideElement CREDIT_BUTTON = $$("button").find(Condition.exactText("Купить в кредит"));
 
@@ -51,46 +39,192 @@ public class PageObjectsTravel{
         open("http://localhost:8080/");
     }
 
-    public PageObjectsTravel setFields(int typeCard) {
-        this.typeCard = typeCard;
+    public PageObjectsTravel setFields(String cardNumber) {
+        CARD_NUMBER_INPUT.click();
+        CARD_NUMBER_INPUT.sendKeys(cardNumber);
 
-        if (typeCard == APPROVED_CARD) {
-            CARD_NUMBER_INPUT.click();
-            CARD_NUMBER_INPUT.sendKeys(Info.getFirstCard());
-        } else if (typeCard == DECLINED_CARD) {
-            CARD_NUMBER_INPUT.click();
-            CARD_NUMBER_INPUT.sendKeys(Info.getSecondCard());
-        } else if (typeCard == UNKNOWN_CARD) {
-            CARD_NUMBER_INPUT.click();
-            CARD_NUMBER_INPUT.sendKeys(InvalidDataInfo.CardFields.getUnknownFormatCardNumber());
-        }
         MONTH_INPUT.click();
         MONTH_INPUT.sendKeys(Info.getMonth());
+
         YEAR_INPUT.click();
         YEAR_INPUT.sendKeys(Info.getYear());
+
         OWNER_INPUT.click();
         OWNER_INPUT.sendKeys(Info.getRandomOwner());
+
         CVC_CODE_INPUT.click();
         CVC_CODE_INPUT.sendKeys(Info.getRandomCvcCode());
+
         return this;
     }
 
     public PageObjectsTravel setInvalidFields1() {
-        CARD_NUMBER_INPUT.sendKeys(InvalidDataInfo.CardFields.getUnknownFormatCardNumber());
+        CARD_NUMBER_INPUT.click();
+        CARD_NUMBER_INPUT.sendKeys(Info.getFirstCard());
+
+        MONTH_INPUT.click();
         MONTH_INPUT.sendKeys(InvalidDataInfo.CardFields.getInvalidMonth1());
-        YEAR_INPUT.sendKeys(InvalidDataInfo.CardFields.getPastYear());
+
+        YEAR_INPUT.click();
+        YEAR_INPUT.sendKeys(Info.getYear());
+
+        OWNER_INPUT.click();
         OWNER_INPUT.sendKeys(Info.getRandomOwner());
-        CVC_CODE_INPUT.sendKeys(InvalidDataInfo.CardFields.getInvalidCvcCode());
+
+        CVC_CODE_INPUT.click();
+        CVC_CODE_INPUT.sendKeys(Info.getRandomCvcCode());
 
         return this;
     }
 
     public PageObjectsTravel setInvalidFields2() {
-        CARD_NUMBER_INPUT.sendKeys(InvalidDataInfo.CardFields.getUnknownFormatCardNumber());
+        CARD_NUMBER_INPUT.click();
+        CARD_NUMBER_INPUT.sendKeys(Info.getFirstCard());
+
+        MONTH_INPUT.click();
         MONTH_INPUT.sendKeys(InvalidDataInfo.CardFields.getInvalidMonth2());
-        YEAR_INPUT.sendKeys(InvalidDataInfo.CardFields.getPastYear());
+
+        YEAR_INPUT.click();
+        YEAR_INPUT.sendKeys(Info.getYear());
+
+        OWNER_INPUT.click();
         OWNER_INPUT.sendKeys(Info.getRandomOwner());
+
+        CVC_CODE_INPUT.click();
+        CVC_CODE_INPUT.sendKeys(Info.getRandomCvcCode());
+
+        return this;
+    }
+
+    public PageObjectsTravel setInvalidFields00() {
+        CARD_NUMBER_INPUT.click();
+        CARD_NUMBER_INPUT.sendKeys(Info.getFirstCard());
+
+        MONTH_INPUT.click();
+        MONTH_INPUT.sendKeys("00");
+
+        YEAR_INPUT.click();
+        YEAR_INPUT.sendKeys(Info.getYear());
+
+        OWNER_INPUT.click();
+        OWNER_INPUT.sendKeys(Info.getRandomOwner());
+
+        CVC_CODE_INPUT.click();
+        CVC_CODE_INPUT.sendKeys(Info.getRandomCvcCode());
+
+        return this;
+    }
+
+    public PageObjectsTravel setValidFieldsAndPastYear() {
+        CARD_NUMBER_INPUT.click();
+        CARD_NUMBER_INPUT.sendKeys(Info.getFirstCard());
+
+        MONTH_INPUT.click();
+        MONTH_INPUT.sendKeys(Info.getMonth());
+
+        YEAR_INPUT.click();
+        YEAR_INPUT.sendKeys(InvalidDataInfo.CardFields.getPastYear());
+
+        OWNER_INPUT.click();
+        OWNER_INPUT.sendKeys(Info.getRandomOwner());
+
+        CVC_CODE_INPUT.click();
+        CVC_CODE_INPUT.sendKeys(Info.getRandomCvcCode());
+
+        return this;
+    }
+
+    public PageObjectsTravel setValidFieldsAndYear00() {
+        CARD_NUMBER_INPUT.click();
+        CARD_NUMBER_INPUT.sendKeys(Info.getFirstCard());
+
+        MONTH_INPUT.click();
+        MONTH_INPUT.sendKeys(Info.getMonth());
+
+        YEAR_INPUT.click();
+        YEAR_INPUT.sendKeys("00");
+
+        OWNER_INPUT.click();
+        OWNER_INPUT.sendKeys(Info.getRandomOwner());
+
+        CVC_CODE_INPUT.click();
+        CVC_CODE_INPUT.sendKeys(Info.getRandomCvcCode());
+
+        return this;
+    }
+
+    public PageObjectsTravel setValidFieldsAndVeryOldYear() {
+        CARD_NUMBER_INPUT.click();
+        CARD_NUMBER_INPUT.sendKeys(Info.getFirstCard());
+
+        MONTH_INPUT.click();
+        MONTH_INPUT.sendKeys(Info.getMonth());
+
+        YEAR_INPUT.click();
+        YEAR_INPUT.sendKeys(InvalidDataInfo.CardFields.getVeryOldYear());
+
+        OWNER_INPUT.click();
+        OWNER_INPUT.sendKeys(Info.getRandomOwner());
+
+        CVC_CODE_INPUT.click();
+        CVC_CODE_INPUT.sendKeys(Info.getRandomCvcCode());
+
+        return this;
+    }
+
+    public PageObjectsTravel setInvalidCVCFormat() {
+        CARD_NUMBER_INPUT.click();
+        CARD_NUMBER_INPUT.sendKeys(Info.getFirstCard());
+
+        MONTH_INPUT.click();
+        MONTH_INPUT.sendKeys(Info.getMonth());
+
+        YEAR_INPUT.click();
+        YEAR_INPUT.sendKeys(Info.getYear());
+
+        OWNER_INPUT.click();
+        OWNER_INPUT.sendKeys(Info.getRandomOwner());
+
+        CVC_CODE_INPUT.click();
         CVC_CODE_INPUT.sendKeys(InvalidDataInfo.CardFields.getInvalidCvcCode());
+
+        return this;
+    }
+
+    public PageObjectsTravel setInvalidOwnerFormat() {
+        CARD_NUMBER_INPUT.click();
+        CARD_NUMBER_INPUT.sendKeys(Info.getFirstCard());
+
+        MONTH_INPUT.click();
+        MONTH_INPUT.sendKeys(Info.getMonth());
+
+        YEAR_INPUT.click();
+        YEAR_INPUT.sendKeys(Info.getYear());
+
+        OWNER_INPUT.click();
+        OWNER_INPUT.sendKeys("");
+
+        CVC_CODE_INPUT.click();
+        CVC_CODE_INPUT.sendKeys(Info.getRandomCvcCode());
+
+        return this;
+    }
+
+    public PageObjectsTravel setInvalidOwnerRusFormat() {
+        CARD_NUMBER_INPUT.click();
+        CARD_NUMBER_INPUT.sendKeys(Info.getFirstCard());
+
+        MONTH_INPUT.click();
+        MONTH_INPUT.sendKeys(Info.getMonth());
+
+        YEAR_INPUT.click();
+        YEAR_INPUT.sendKeys(Info.getYear());
+
+        OWNER_INPUT.click();
+        OWNER_INPUT.sendKeys(InvalidDataInfo.CardFields.getInvalidRusOwner());
+
+        CVC_CODE_INPUT.click();
+        CVC_CODE_INPUT.sendKeys(Info.getRandomCvcCode());
 
         return this;
     }
@@ -111,4 +245,44 @@ public class PageObjectsTravel{
         CONTINUE_BUTTON.click();
         return this;
     }
+
+    public void notificationStatusOK() {
+        NOTIFICATION_STATUS_OK.shouldBe(Condition.visible, Duration.ofSeconds(15));
+    }
+
+    public PageObjectsTravel notificationStatusError() {
+        NOTIFICATION_STATUS_ERROR.shouldBe(Condition.visible, Duration.ofSeconds(15));
+        return this;
+    }
+
+    public PageObjectsTravel cardNumberFieldError() {
+        CARD_NUMBER_FIELD_ERROR.shouldBe(Condition.visible, Duration.ofSeconds(15));
+        return this;
+    }
+
+    public PageObjectsTravel monthFieldError() {
+        MONTH_FIELD_ERROR.shouldBe(Condition.visible, Duration.ofSeconds(15));
+        return this;
+    }
+
+    public PageObjectsTravel yearFieldErrorFormat() {
+        YEAR_FIELD_ERROR_UNKNOWN_FORMAT.shouldBe(Condition.visible, Duration.ofSeconds(15));
+        return this;
+    }
+
+    public PageObjectsTravel yearFieldErrorValidate() {
+        YEAR_FIELD_DATE_VALIDATE_ERROR.shouldBe(Condition.visible, Duration.ofSeconds(15));
+        return this;
+    }
+
+    public PageObjectsTravel ownerFieldError() {
+        OWNER_FIELD_ERROR.shouldBe(Condition.visible, Duration.ofSeconds(15));
+        return this;
+    }
+
+    public PageObjectsTravel cvcFieldError() {
+        CVC_FIELD_ERROR.shouldBe(Condition.visible, Duration.ofSeconds(15));
+        return this;
+    }
+
 }

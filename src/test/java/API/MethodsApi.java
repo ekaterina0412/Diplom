@@ -12,7 +12,7 @@ public class MethodsApi {
 
     private static RequestSpecification requestSpec = new RequestSpecBuilder()
             .setBaseUri("http://localhost")
-            .setPort(8080)
+            .setPort(9999)
             .setAccept(ContentType.JSON)
             .setContentType(ContentType.JSON)
             .log(LogDetail.ALL)

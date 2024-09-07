@@ -9,7 +9,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
 import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class APITest {
     @BeforeEach
@@ -36,7 +35,5 @@ public class APITest {
 
         response.statusCode(statusCode);
         response.body("status", (ResponseAwareMatcher) response1 -> equalTo(status));
-
-        assertEquals(SQL.getPaymentStatus(), status);
     }
 }

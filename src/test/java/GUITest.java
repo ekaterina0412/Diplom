@@ -1,6 +1,5 @@
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selectors;
 import com.codeborne.selenide.logevents.SelenideLogger;
+import data.InvalidDataInfo;
 import io.qameta.allure.Description;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
@@ -8,9 +7,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import pageobjects.PageObjectsTravel;
 
-import java.time.Duration;
+import java.util.Objects;
 
-import static com.codeborne.selenide.Selenide.$;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GUITest {
@@ -34,12 +32,19 @@ public class GUITest {
     @Description("We check the form through the \"Buy\" button. We serve different card numbers")
     @ParameterizedTest
     @CsvFileSource(resources = "./NotificationCheck.csv", numLinesToSkip = 1)
-    void paymentTest(int cardNumber, String baseStatus) {
+    void paymentTest(String cardNumber, String baseStatus) {
+
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
                 .setFields(cardNumber)
                 .continueButtonClick();
-        $(Selectors.withText("Успешно")).shouldBe(Condition.visible, Duration.ofSeconds(15));
+
+        if (Objects.equals(baseStatus, "APPROVED")) {
+            travel.notificationStatusOK();
+        } else {
+            travel.notificationStatusError();
+        };
+
         assertEquals(SQL.getPaymentStatus(), baseStatus);
     }
 
@@ -47,12 +52,18 @@ public class GUITest {
     @Description("We check the form through the \"buy in credit\" button. We serve different card numbers")
     @ParameterizedTest
     @CsvFileSource(resources = "./NotificationCheck.csv", numLinesToSkip = 1)
-    void creditTest(int cardNumber, String baseStatus) {
+    void creditTest(String cardNumber, String baseStatus) {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
                 .setFields(cardNumber)
                 .continueButtonClick();
-        $(Selectors.withText("Успешно")).shouldBe(Condition.visible, Duration.ofSeconds(15));
+
+        if (Objects.equals(baseStatus, "APPROVED")) {
+            travel.notificationStatusOK();
+        } else {
+            travel.notificationStatusError();
+        };
+
         assertEquals(SQL.getCreditStatus(), baseStatus);
     }
 
@@ -62,8 +73,9 @@ public class GUITest {
     void paymentWithUnknownCardNumber() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .setFields(2)
-                .continueButtonClick();
+                .setFields(InvalidDataInfo.CardFields.getUnknownFormatCardNumber())
+                .continueButtonClick()
+                .cardNumberFieldError();
     }
 
     @DisplayName("By to credit with unknown card")
@@ -72,8 +84,9 @@ public class GUITest {
     void creditWithUnknownCardNumber() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .setFields(2)
-                .continueButtonClick();
+                .setFields(InvalidDataInfo.CardFields.getUnknownFormatCardNumber())
+                .continueButtonClick()
+                .cardNumberFieldError();
     }
 
     @DisplayName("Empty fields payment form")
@@ -82,7 +95,12 @@ public class GUITest {
     void emptyFieldsPaymentCheck() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .continueButtonClick();
+                .continueButtonClick()
+                .cardNumberFieldError()
+                .monthFieldError()
+                .yearFieldErrorFormat()
+                .ownerFieldError()
+                .cvcFieldError();
     }
 
     @DisplayName("Empty fields credit form")
@@ -91,26 +109,209 @@ public class GUITest {
     void emptyFieldsCreditCheck() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .continueButtonClick();
+                .continueButtonClick()
+                .cardNumberFieldError()
+                .monthFieldError()
+                .yearFieldErrorFormat()
+                .ownerFieldError()
+                .cvcFieldError();
     }
 
-    @DisplayName("Wrong format 1 to valid date fields")
-    @Description("Set past year and unreal month 1")
+    @DisplayName("Wrong year to valid date fields")
+    @Description("Set past year")
     @Test
-    void invalidDateFieldsPaymentCheck1() {
+    void invalidYearFieldPaymentCheck1() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .paymentButtonClick()
+                .setValidFieldsAndPastYear()
+                .continueButtonClick()
+                .yearFieldErrorValidate();
+    }
+
+    @DisplayName("Wrong year to valid date fields")
+    @Description("Set past year")
+    @Test
+    void invalidYearFieldCreditCheck1() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .creditButtonClick()
+                .setValidFieldsAndPastYear()
+                .continueButtonClick()
+                .yearFieldErrorValidate();
+    }
+
+    @DisplayName("Wrong year to valid date fields")
+    @Description("Set very old year")
+    @Test
+    void invalidYearFieldPaymentCheck2() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .paymentButtonClick()
+                .setValidFieldsAndVeryOldYear()
+                .continueButtonClick()
+                .yearFieldErrorValidate();
+    }
+
+    @DisplayName("Wrong year to valid date fields")
+    @Description("Set very old year")
+    @Test
+    void invalidYearFieldCreditCheck2() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .creditButtonClick()
+                .setValidFieldsAndVeryOldYear()
+                .continueButtonClick()
+                .yearFieldErrorValidate();
+    }
+
+    @DisplayName("Wrong year to valid date fields")
+    @Description("Set 00 year")
+    @Test
+    void invalidYearFieldPaymentCheck00() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .paymentButtonClick()
+                .setValidFieldsAndYear00()
+                .continueButtonClick()
+                .yearFieldErrorValidate();
+    }
+
+    @DisplayName("Wrong year to valid date fields")
+    @Description("Set 00 year")
+    @Test
+    void invalidYearFieldCreditCheck00() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .creditButtonClick()
+                .setValidFieldsAndYear00()
+                .continueButtonClick()
+                .yearFieldErrorValidate();
+    }
+
+    @DisplayName("Wrong format month 1")
+    @Description("Set unreal month 1")
+    @Test
+    void invalidMonthFormatPayment1() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
                 .setInvalidFields1()
-                .continueButtonClick();
+                .continueButtonClick()
+                .monthFieldError();
     }
 
-    @DisplayName("Wrong format 2 to valid date fields")
-    @Description("Set past year and unreal month 2")
+    @DisplayName("Wrong format month 1")
+    @Description("Set unreal month 1")
     @Test
-    void invalidDateFieldsPaymentCheck2() {
+    void invalidMonthFormatCredit1() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .creditButtonClick()
+                .setInvalidFields1()
+                .continueButtonClick()
+                .monthFieldError();
+    }
+
+    @DisplayName("Wrong format  month2 to valid date fields")
+    @Description("Set unreal month 2")
+    @Test
+    void invalidMonthFormatPayment2() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
                 .setInvalidFields2()
-                .continueButtonClick();
+                .continueButtonClick()
+                .monthFieldError();
+    }
+
+    @DisplayName("Wrong format  month2 to valid date fields")
+    @Description("Set unreal month 2")
+    @Test
+    void invalidMonthFormatCredit2() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .creditButtonClick()
+                .setInvalidFields2()
+                .continueButtonClick()
+                .monthFieldError();
+    }
+
+    @DisplayName("Wrong format  month 00 to valid date fields")
+    @Description("Set unreal month 00")
+    @Test
+    void invalidMonthFormatPayment00() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .paymentButtonClick()
+                .setInvalidFields00()
+                .continueButtonClick()
+                .monthFieldError();
+    }
+
+    @DisplayName("Wrong format  month 00 to valid date fields")
+    @Description("Set unreal month 00")
+    @Test
+    void invalidMonthFormatCredit00() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .creditButtonClick()
+                .setInvalidFields00()
+                .continueButtonClick()
+                .monthFieldError();
+    }
+
+    @DisplayName("Wrong format cvc")
+    @Description("Set unreal month 1")
+    @Test
+    void invalidCVCFormatPayment() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .paymentButtonClick()
+                .setInvalidCVCFormat()
+                .continueButtonClick()
+                .cvcFieldError();
+    }
+
+    @DisplayName("Wrong format cvc")
+    @Description("Set unreal month 1")
+    @Test
+    void invalidCVCFormatCredit() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .creditButtonClick()
+                .setInvalidCVCFormat()
+                .continueButtonClick()
+                .cvcFieldError();
+    }
+
+    @DisplayName("Wrong format owner")
+    @Description("Don't set owner")
+    @Test
+    void invalidOwnerFormatPayment() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .paymentButtonClick()
+                .setInvalidOwnerFormat()
+                .continueButtonClick()
+                .ownerFieldError();
+    }
+
+    @DisplayName("Wrong format owner")
+    @Description("Don't set owner")
+    @Test
+    void invalidOwnerFormatCredit() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .creditButtonClick()
+                .setInvalidOwnerFormat()
+                .continueButtonClick()
+                .ownerFieldError();
+    }
+
+    @DisplayName("Wrong format owner")
+    @Description("Set russian owner")
+    @Test
+    void invalidOwnerRusFormatPayment() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .paymentButtonClick()
+                .setInvalidOwnerRusFormat()
+                .continueButtonClick()
+                .notificationStatusError();
+    }
+
+    @DisplayName("Wrong format owner")
+    @Description("Set russian owner")
+    @Test
+    void invalidOwnerRusFormatCredit() {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .creditButtonClick()
+                .setInvalidOwnerRusFormat()
+                .continueButtonClick()
+                .notificationStatusError();
     }
 }

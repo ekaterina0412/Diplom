@@ -70,7 +70,7 @@ public class Info {
 
     public static String getSecondCard() {
         String secondCardNumber;
-        secondCardNumber = "4444444444444441";
+        secondCardNumber = "4444444444444442";
         return secondCardNumber;
     }
 }
