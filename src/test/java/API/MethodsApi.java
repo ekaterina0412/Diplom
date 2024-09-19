@@ -27,6 +27,7 @@ public class MethodsApi {
                 .body(apiDTO)
                 .when()
                 .post(url)
-                .then();
+                .then()
+                .statusCode(200);
     }
 }

@@ -2,7 +2,8 @@ package data;
 
 import com.github.javafaker.Faker;
 
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Random;
 
@@ -11,7 +12,9 @@ public class Info {
     }
 
     public static String getMonth() {
-        String res = "";
+        return LocalDate.now().format(DateTimeFormatter.ofPattern("MM"));
+
+        /*String res = "";
 
         Calendar calendar = Calendar.getInstance();
         int month = calendar.get(Calendar.MONTH) + 1;
@@ -23,18 +26,19 @@ public class Info {
             res = "0" + month_as_str;
         }
 
-        return res;
+        return res;*/
     }
 
     public static String getYear() {
-        String res = "";
+        return LocalDate.now().format(DateTimeFormatter.ofPattern("yy"));
+        /*String res = "";
 
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         String year_as_str = Integer.toString(year);
         res = year_as_str.substring(year_as_str.length() - 2);
 
-        return res;
+        return res;*/
     }
 
     public static String getRandomOwner() {

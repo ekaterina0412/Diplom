@@ -1,6 +1,7 @@
 package data;
 
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
 public class InvalidDataInfo {
@@ -36,25 +37,27 @@ public class InvalidDataInfo {
         }
 
         public static String getPastYear() {
-            String res = "";
+            return LocalDate.now().plusYears(-1).format(DateTimeFormatter.ofPattern("yy"));
+            /*String res = "";
 
             Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR) - 1;
             String year_as_str = Integer.toString(year);
             res = year_as_str.substring(year_as_str.length() - 2);
 
-            return res;
+            return res;*/
         }
 
         public static String getVeryOldYear() {
-            String res = "";
+            return LocalDate.now().plusYears(-10).format(DateTimeFormatter.ofPattern("yy"));
+            /*String res = "";
 
             Calendar calendar = Calendar.getInstance();
             int year = calendar.get(Calendar.YEAR) - 10;
             String year_as_str = Integer.toString(year);
             res = year_as_str.substring(year_as_str.length() - 2);
 
-            return res;
+            return res;*/
         }
 
         public static String getInvalidCvcCode() {

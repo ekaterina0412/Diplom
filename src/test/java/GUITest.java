@@ -1,4 +1,5 @@
 import com.codeborne.selenide.logevents.SelenideLogger;
+import data.Info;
 import data.InvalidDataInfo;
 import io.qameta.allure.Description;
 import io.qameta.allure.selenide.AllureSelenide;
@@ -6,8 +7,6 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import pageobjects.PageObjectsTravel;
-
-import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,40 +28,63 @@ public class GUITest {
     }
 
     @DisplayName("By to payment")
-    @Description("We check the form through the \"Buy\" button. We serve different card numbers")
+    @Description("We check the form through the \"Buy\" button.")
     @ParameterizedTest
-    @CsvFileSource(resources = "./NotificationCheck.csv", numLinesToSkip = 1)
-    void paymentTest(String cardNumber, String baseStatus) {
+    @CsvFileSource(resources = "./NotificationCheckApproved.csv", numLinesToSkip = 1)
+    void paymentTestApproved(String cardNumber, String baseStatus) {
 
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .setFields(cardNumber)
+                .setFields(cardNumber, Info.getMonth(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick();
 
-        if (Objects.equals(baseStatus, "APPROVED")) {
-            travel.notificationStatusOK();
-        } else {
-            travel.notificationStatusError();
-        };
+        travel.notificationStatusOK();
+
+        assertEquals(SQL.getPaymentStatus(), baseStatus);
+    }
+
+    @DisplayName("By to payment")
+    @Description("We check the form through the \"Buy\" button.")
+    @ParameterizedTest
+    @CsvFileSource(resources = "./NotificationCheckDeclined.csv", numLinesToSkip = 1)
+    void paymentTestDeclined(String cardNumber, String baseStatus) {
+
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .paymentButtonClick()
+                .setFields(cardNumber, Info.getMonth(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
+                .continueButtonClick();
+
+        travel.notificationStatusError();
 
         assertEquals(SQL.getPaymentStatus(), baseStatus);
     }
 
     @DisplayName("By to credit")
-    @Description("We check the form through the \"buy in credit\" button. We serve different card numbers")
+    @Description("We check the form through the \"buy in credit\" button.")
     @ParameterizedTest
-    @CsvFileSource(resources = "./NotificationCheck.csv", numLinesToSkip = 1)
-    void creditTest(String cardNumber, String baseStatus) {
+    @CsvFileSource(resources = "./NotificationCheckApproved.csv", numLinesToSkip = 1)
+    void creditTestApproved(String cardNumber, String baseStatus) {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .setFields(cardNumber)
+                .setFields(cardNumber, Info.getMonth(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick();
 
-        if (Objects.equals(baseStatus, "APPROVED")) {
-            travel.notificationStatusOK();
-        } else {
-            travel.notificationStatusError();
-        };
+        travel.notificationStatusOK();
+
+        assertEquals(SQL.getCreditStatus(), baseStatus);
+    }
+
+    @DisplayName("By to credit")
+    @Description("We check the form through the \"buy in credit\" button.")
+    @ParameterizedTest
+    @CsvFileSource(resources = "./NotificationCheckDeclined.csv", numLinesToSkip = 1)
+    void creditTestDeclined(String cardNumber, String baseStatus) {
+        PageObjectsTravel travel = new PageObjectsTravel()
+                .creditButtonClick()
+                .setFields(cardNumber, Info.getMonth(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
+                .continueButtonClick();
+
+        travel.notificationStatusError();
 
         assertEquals(SQL.getCreditStatus(), baseStatus);
     }
@@ -73,7 +95,7 @@ public class GUITest {
     void paymentWithUnknownCardNumber() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .setFields(InvalidDataInfo.CardFields.getUnknownFormatCardNumber())
+                .setFields(InvalidDataInfo.CardFields.getUnknownFormatCardNumber(), Info.getMonth(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick()
                 .cardNumberFieldError();
     }
@@ -84,7 +106,7 @@ public class GUITest {
     void creditWithUnknownCardNumber() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .setFields(InvalidDataInfo.CardFields.getUnknownFormatCardNumber())
+                .setFields(InvalidDataInfo.CardFields.getUnknownFormatCardNumber(), Info.getMonth(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick()
                 .cardNumberFieldError();
     }
@@ -123,7 +145,7 @@ public class GUITest {
     void invalidYearFieldPaymentCheck1() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .setValidFieldsAndPastYear()
+                .setFields(Info.getFirstCard(), Info.getMonth(), InvalidDataInfo.CardFields.getPastYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick()
                 .yearFieldErrorValidate();
     }
@@ -134,7 +156,7 @@ public class GUITest {
     void invalidYearFieldCreditCheck1() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .setValidFieldsAndPastYear()
+                .setFields(Info.getFirstCard(), Info.getMonth(), InvalidDataInfo.CardFields.getPastYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick()
                 .yearFieldErrorValidate();
     }
@@ -145,7 +167,7 @@ public class GUITest {
     void invalidYearFieldPaymentCheck2() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .setValidFieldsAndVeryOldYear()
+                .setFields(Info.getFirstCard(), Info.getMonth(), InvalidDataInfo.CardFields.getVeryOldYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick()
                 .yearFieldErrorValidate();
     }
@@ -156,7 +178,7 @@ public class GUITest {
     void invalidYearFieldCreditCheck2() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .setValidFieldsAndVeryOldYear()
+                .setFields(Info.getFirstCard(), Info.getMonth(), InvalidDataInfo.CardFields.getVeryOldYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick()
                 .yearFieldErrorValidate();
     }
@@ -167,7 +189,7 @@ public class GUITest {
     void invalidYearFieldPaymentCheck00() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .setValidFieldsAndYear00()
+                .setFields(Info.getFirstCard(), Info.getMonth(), "00", Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick()
                 .yearFieldErrorValidate();
     }
@@ -178,7 +200,7 @@ public class GUITest {
     void invalidYearFieldCreditCheck00() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .setValidFieldsAndYear00()
+                .setFields(Info.getFirstCard(), Info.getMonth(), "00", Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick()
                 .yearFieldErrorValidate();
     }
@@ -189,7 +211,7 @@ public class GUITest {
     void invalidMonthFormatPayment1() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .setInvalidFields1()
+                .setFields(Info.getFirstCard(), InvalidDataInfo.CardFields.getInvalidMonth1(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick()
                 .monthFieldError();
     }
@@ -200,7 +222,7 @@ public class GUITest {
     void invalidMonthFormatCredit1() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .setInvalidFields1()
+                .setFields(Info.getFirstCard(), InvalidDataInfo.CardFields.getInvalidMonth1(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick()
                 .monthFieldError();
     }
@@ -211,7 +233,7 @@ public class GUITest {
     void invalidMonthFormatPayment2() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .setInvalidFields2()
+                .setFields(Info.getFirstCard(), InvalidDataInfo.CardFields.getInvalidMonth2(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick()
                 .monthFieldError();
     }
@@ -222,7 +244,7 @@ public class GUITest {
     void invalidMonthFormatCredit2() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .setInvalidFields2()
+                .setFields(Info.getFirstCard(), InvalidDataInfo.CardFields.getInvalidMonth2(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick()
                 .monthFieldError();
     }
@@ -233,7 +255,7 @@ public class GUITest {
     void invalidMonthFormatPayment00() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .setInvalidFields00()
+                .setFields(Info.getFirstCard(), "00", Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick()
                 .monthFieldError();
     }
@@ -244,7 +266,7 @@ public class GUITest {
     void invalidMonthFormatCredit00() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .setInvalidFields00()
+                .setFields(Info.getFirstCard(), "00", Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick()
                 .monthFieldError();
     }
@@ -255,7 +277,7 @@ public class GUITest {
     void invalidCVCFormatPayment() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .setInvalidCVCFormat()
+                .setFields(Info.getFirstCard(), Info.getMonth(), Info.getYear(), Info.getRandomOwner(), InvalidDataInfo.CardFields.getInvalidCvcCode())
                 .continueButtonClick()
                 .cvcFieldError();
     }
@@ -266,7 +288,7 @@ public class GUITest {
     void invalidCVCFormatCredit() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .setInvalidCVCFormat()
+                .setFields(Info.getFirstCard(), Info.getMonth(), Info.getYear(), Info.getRandomOwner(), InvalidDataInfo.CardFields.getInvalidCvcCode())
                 .continueButtonClick()
                 .cvcFieldError();
     }
@@ -277,7 +299,7 @@ public class GUITest {
     void invalidOwnerFormatPayment() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .setInvalidOwnerFormat()
+                .setFields(Info.getFirstCard(), Info.getMonth(), Info.getYear(), "", Info.getRandomCvcCode())
                 .continueButtonClick()
                 .ownerFieldError();
     }
@@ -288,7 +310,7 @@ public class GUITest {
     void invalidOwnerFormatCredit() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .setInvalidOwnerFormat()
+                .setFields(Info.getFirstCard(), Info.getMonth(), Info.getYear(), "", Info.getRandomCvcCode())
                 .continueButtonClick()
                 .ownerFieldError();
     }
@@ -299,7 +321,7 @@ public class GUITest {
     void invalidOwnerRusFormatPayment() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .setInvalidOwnerRusFormat()
+                .setFields(Info.getFirstCard(), Info.getMonth(), Info.getYear(), InvalidDataInfo.CardFields.getInvalidRusOwner(), Info.getRandomCvcCode())
                 .continueButtonClick()
                 .notificationStatusError();
     }
@@ -310,7 +332,7 @@ public class GUITest {
     void invalidOwnerRusFormatCredit() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .setInvalidOwnerRusFormat()
+                .setFields(Info.getFirstCard(), Info.getMonth(), Info.getYear(), InvalidDataInfo.CardFields.getInvalidRusOwner(), Info.getRandomCvcCode())
                 .continueButtonClick()
                 .notificationStatusError();
     }

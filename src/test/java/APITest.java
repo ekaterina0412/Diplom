@@ -19,19 +19,14 @@ public class APITest {
 
     @ParameterizedTest
     @CsvFileSource(resources = "/RequestDataApi.csv", numLinesToSkip = 1)
-    void paymentApprovedCardTest(String number, int typeConnection, int statusCode, String status)  {
+    void paymentApprovedCardTest(String number, String typeConnection, int statusCode, String status)  {
         FieldsApiDTO fieldsApiDTO = new FieldsApiDTO(number,
                 Integer.parseInt(Info.getMonth()),
                 Integer.parseInt(Info.getYear()),
                 Info.getRandomOwner(),
                 Integer.parseInt(Info.getRandomCvcCode()));
 
-        String url = "/payment";
-        if (typeConnection == 1) {
-            url = "/credit";
-        }
-
-        ValidatableResponse response = MethodsApi.payRequest(fieldsApiDTO, url);
+        ValidatableResponse response = MethodsApi.payRequest(fieldsApiDTO, typeConnection);
 
         response.statusCode(statusCode);
         response.body("status", (ResponseAwareMatcher) response1 -> equalTo(status));
