@@ -29,34 +29,32 @@ public class GUITest {
 
     @DisplayName("By to payment")
     @Description("We check the form through the \"Buy\" button.")
-    @ParameterizedTest
-    @CsvFileSource(resources = "./NotificationCheckApproved.csv", numLinesToSkip = 1)
-    void paymentTestApproved(String cardNumber, String baseStatus) {
+    @Test
+    void paymentTestApproved() {
 
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .setFields(cardNumber, Info.getMonth(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
+                .setFields("4444 4444 4444 4441", Info.getMonth(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick();
 
         travel.notificationStatusOK();
 
-        assertEquals(SQL.getPaymentStatus(), baseStatus);
+        assertEquals(SQL.getPaymentStatus(), "APPROVED");
     }
 
     @DisplayName("By to payment")
     @Description("We check the form through the \"Buy\" button.")
-    @ParameterizedTest
-    @CsvFileSource(resources = "./NotificationCheckDeclined.csv", numLinesToSkip = 1)
-    void paymentTestDeclined(String cardNumber, String baseStatus) {
+    @Test
+    void paymentTestDeclined() {
 
         PageObjectsTravel travel = new PageObjectsTravel()
                 .paymentButtonClick()
-                .setFields(cardNumber, Info.getMonth(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
+                .setFields("4444 4444 4444 4442", Info.getMonth(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick();
 
         travel.notificationStatusError();
 
-        assertEquals(SQL.getPaymentStatus(), baseStatus);
+        assertEquals(SQL.getPaymentStatus(), "DECLINED");
     }
 
     @DisplayName("By to credit")

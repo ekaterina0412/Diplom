@@ -19,7 +19,8 @@ public class PageObjectsTravel{
     private static final SelenideElement CARD_NUMBER_INPUT = $("[placeholder='0000 0000 0000 0000']");
     private static final SelenideElement MONTH_INPUT = $("[placeholder='08']");
     private static final SelenideElement YEAR_INPUT = $("[placeholder='22']");
-    private static final SelenideElement OWNER_INPUT = $("div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input");
+    //private static final SelenideElement OWNER_INPUT = $("div:nth-child(3) > span > span:nth-child(1) > span > span > span.input__box > input");
+    private static final SelenideElement OWNER_INPUT = $("div:nth-child(3) > span > span:nth-child(1) input");
     private static final SelenideElement CVC_CODE_INPUT = $("[placeholder='999']");
     private static final SelenideElement CONTINUE_BUTTON = $$("button").find(Condition.exactText("Продолжить"));;
 
@@ -27,11 +28,14 @@ public class PageObjectsTravel{
     private static final SelenideElement NOTIFICATION_STATUS_ERROR = $(".notification_status_error");
 
     private static final SelenideElement CARD_NUMBER_FIELD_ERROR = $("div:nth-child(1) > span > span > span.input__sub");
-    private static final SelenideElement MONTH_FIELD_ERROR = $("div:nth-child(2) > span > span:nth-child(1) > span > span > span.input__sub");
-    private static final SelenideElement YEAR_FIELD_ERROR_UNKNOWN_FORMAT = $("div:nth-child(2) > span > span:nth-child(2) > span > span > span.input__sub");
+    //private static final SelenideElement MONTH_FIELD_ERROR = $("div:nth-child(2) > span > span:nth-child(1) > span > span > span.input__sub");
+    private static final SelenideElement MONTH_FIELD_ERROR = $("div:nth-child(2) > span > span:nth-child(1) .input__sub");
+    //private static final SelenideElement YEAR_FIELD_ERROR_UNKNOWN_FORMAT = $("div:nth-child(2) > span > span:nth-child(2) > span > span > span.input__sub");
+    private static final SelenideElement YEAR_FIELD_ERROR_UNKNOWN_FORMAT = $("div:nth-child(2) > span > span:nth-child(2) .input__sub");
     private static final SelenideElement YEAR_FIELD_DATE_VALIDATE_ERROR = $(byText("Истёк срок действия карты"));
     private static final SelenideElement OWNER_FIELD_ERROR = $(byText("Поле обязательно для заполнения"));
-    private static final SelenideElement CVC_FIELD_ERROR = $("div:nth-child(3) > span > span:nth-child(2) > span > span > span.input__sub");
+    //private static final SelenideElement CVC_FIELD_ERROR = $("div:nth-child(3) > span > span:nth-child(2) > span > span > span.input__sub");
+    private static final SelenideElement CVC_FIELD_ERROR = $("div:nth-child(3) > span > span:nth-child(2) .input__sub");
 
     public PageObjectsTravel() {
         open("http://localhost:8080/");

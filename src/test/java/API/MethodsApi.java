@@ -21,13 +21,13 @@ public class MethodsApi {
     private MethodsApi() {
     }
 
-    public static ValidatableResponse payRequest(FieldsApiDTO apiDTO, String url) {
+    public static ValidatableResponse payRequest(FieldsApiDTO apiDTO, String url, int statusCode) {
         return given()
                 .spec(requestSpec)
                 .body(apiDTO)
                 .when()
                 .post(url)
                 .then()
-                .statusCode(200);
+                .statusCode(statusCode);
     }
 }

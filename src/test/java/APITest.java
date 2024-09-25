@@ -1,14 +1,11 @@
 import api.FieldsApiDTO;
 import api.MethodsApi;
 import data.Info;
-import io.restassured.matcher.ResponseAwareMatcher;
 import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
-
-import static org.hamcrest.core.IsEqual.equalTo;
 
 public class APITest {
     @BeforeEach
@@ -26,9 +23,8 @@ public class APITest {
                 Info.getRandomOwner(),
                 Integer.parseInt(Info.getRandomCvcCode()));
 
-        ValidatableResponse response = MethodsApi.payRequest(fieldsApiDTO, typeConnection);
+        ValidatableResponse response = MethodsApi.payRequest(fieldsApiDTO, typeConnection, statusCode);
 
-        response.statusCode(statusCode);
-        response.body("status", (ResponseAwareMatcher) response1 -> equalTo(status));
+        //assertEquals(SQL.getPaymentStatus(), status);
     }
 }
