@@ -2,12 +2,11 @@ import api.FieldsApiDTO;
 import api.MethodsApi;
 import data.Info;
 import io.restassured.response.ValidatableResponse;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class APITest {
     @BeforeEach
@@ -27,6 +26,6 @@ public class APITest {
 
         ValidatableResponse response = MethodsApi.payRequest(fieldsApiDTO, typeConnection, statusCode);
 
-        assertEquals(SQL.getPaymentStatus(), status);
+        Assertions.assertEquals(SQL.getPaymentStatus(), status);
     }
 }
