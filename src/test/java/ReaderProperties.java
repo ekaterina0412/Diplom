@@ -9,10 +9,7 @@ public class ReaderProperties {
 
     public static void getDatasourceProperties(int typeDatasourse) throws Exception {
         File file = new File("./application.properties");
-        //Properties properties = new Properties();
-        //properties.load(new FileReader(file));
 
-        //String datasource = properties.getProperty("spring.datasource.url");
         String datasource = System.getProperty("db.url");
         if (typeDatasourse == mySQL) {
             datasource = "jdbc:mysql://localhost:3306/app";

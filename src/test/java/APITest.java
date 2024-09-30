@@ -7,6 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class APITest {
     @BeforeEach
     @DisplayName("Clear base table")
@@ -25,6 +27,6 @@ public class APITest {
 
         ValidatableResponse response = MethodsApi.payRequest(fieldsApiDTO, typeConnection, statusCode);
 
-        //assertEquals(SQL.getPaymentStatus(), status);
+        assertEquals(SQL.getPaymentStatus(), status);
     }
 }

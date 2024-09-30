@@ -13,32 +13,10 @@ public class Info {
 
     public static String getMonth() {
         return LocalDate.now().format(DateTimeFormatter.ofPattern("MM"));
-
-        /*String res = "";
-
-        Calendar calendar = Calendar.getInstance();
-        int month = calendar.get(Calendar.MONTH) + 1;
-        String month_as_str = Integer.toString(month);
-        if (month_as_str.length() == 2){
-            res = month_as_str;
-        }
-        else {
-            res = "0" + month_as_str;
-        }
-
-        return res;*/
     }
 
     public static String getYear() {
         return LocalDate.now().format(DateTimeFormatter.ofPattern("yy"));
-        /*String res = "";
-
-        Calendar calendar = Calendar.getInstance();
-        int year = calendar.get(Calendar.YEAR);
-        String year_as_str = Integer.toString(year);
-        res = year_as_str.substring(year_as_str.length() - 2);
-
-        return res;*/
     }
 
     public static String getRandomOwner() {
