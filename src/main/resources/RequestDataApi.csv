@@ -1,7 +1,5 @@
 number,typeConnection,statusCode,status
-"4444 4444 4444 4441","/payment",200,"APPROVED"
-"4444 4444 4444 4442","/payment",200,"DECLINED"
-"4444 4444 4444 4441","/credit",200,"APPROVED"
-"4444 4444 4444 4442","/credit",200,"DECLINED"
-"1111 1111 1111 1111","/payment",400,""
-"1111 1111 1111 1111","/credit",400,""
+"4444 4444 4444 4441","/api/v1/pay",200,"APPROVED"
+"4444 4444 4444 4442","/api/v1/pay",200,"DECLINED"
+"4444 4444 4444 4441","/api/v1/credit",200,"APPROVED"
+"4444 4444 4444 4442","/api/v1/credit",200,"DECLINED"
