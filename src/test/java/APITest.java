@@ -17,7 +17,7 @@ public class APITest {
     }
 
     @ParameterizedTest
-    @CsvFileSource(resources = "/RequestDataApi.csv", numLinesToSkip = 1)
+    @CsvFileSource(resources = "/RequestDataApiPay.csv", numLinesToSkip = 1)
     void paymentApprovedCardTest(String number, String typeConnection, int statusCode, String status)  {
         FieldsApiDTO fieldsApiDTO = new FieldsApiDTO(number,
                 Integer.parseInt(Info.getMonth()),
@@ -28,6 +28,20 @@ public class APITest {
         ValidatableResponse response = MethodsApi.payRequest(fieldsApiDTO, typeConnection, statusCode);
 
         Assertions.assertEquals(SQL.getPaymentStatus(), status);
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = "/RequestDataApiCredit.csv", numLinesToSkip = 1)
+    void creditApprovedCardTest(String number, String typeConnection, int statusCode, String status)  {
+        FieldsApiDTO fieldsApiDTO = new FieldsApiDTO(number,
+                Integer.parseInt(Info.getMonth()),
+                Integer.parseInt(Info.getYear()),
+                Info.getRandomOwner(),
+                Integer.parseInt(Info.getRandomCvcCode()));
+
+        ValidatableResponse response = MethodsApi.payRequest(fieldsApiDTO, typeConnection, statusCode);
+
+        Assertions.assertEquals(SQL.getCreditStatus(), status);
     }
 
     @Test
