@@ -4,8 +4,6 @@ import data.InvalidDataInfo;
 import io.qameta.allure.Description;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
 import pageobjects.PageObjectsTravel;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,32 +57,30 @@ public class GUITest {
 
     @DisplayName("By to credit")
     @Description("We check the form through the \"buy in credit\" button.")
-    @ParameterizedTest
-    @CsvFileSource(resources = "./NotificationCheckApproved.csv", numLinesToSkip = 1)
-    void creditTestApproved(String cardNumber, String baseStatus) {
+    @Test
+    void creditTestApproved() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .setFields(cardNumber, Info.getMonth(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
+                .setFields("4444 4444 4444 4441", Info.getMonth(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick();
 
         travel.notificationStatusOK();
 
-        assertEquals(SQL.getCreditStatus(), baseStatus);
+        assertEquals(SQL.getCreditStatus(), "APPROVED");
     }
 
     @DisplayName("By to credit")
     @Description("We check the form through the \"buy in credit\" button.")
-    @ParameterizedTest
-    @CsvFileSource(resources = "./NotificationCheckDeclined.csv", numLinesToSkip = 1)
-    void creditTestDeclined(String cardNumber, String baseStatus) {
+    @Test
+    void creditTestDeclined() {
         PageObjectsTravel travel = new PageObjectsTravel()
                 .creditButtonClick()
-                .setFields(cardNumber, Info.getMonth(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
+                .setFields("4444 4444 4444 4442", Info.getMonth(), Info.getYear(), Info.getRandomOwner(), Info.getRandomCvcCode())
                 .continueButtonClick();
 
         travel.notificationStatusError();
 
-        assertEquals(SQL.getCreditStatus(), baseStatus);
+        assertEquals(SQL.getCreditStatus(), "DECLINED");
     }
 
     @DisplayName("By to payment with unknown card")
